@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:01:19">
+<sys_script_fix action="INSERT_OR_UPDATE">
+<active>true</active>
+<before>false</before>
+<description>Test the encoded query – refactored with a bunch of cool stuff addeded in!</description>
+<flush_cache>false</flush_cache>
+<name>CC Lab 1.5 Encoded Query Refactored</name>
+<run_once>true</run_once>
+<script><![CDATA[var loggingSource = '\t****FS:CC Lab 1.5 encodedQuery refactored!-';
+
+// makes it easier to read and maintain
+var sql = 'location.nameLIKESan Diego' + 
+	'^ORlocation.nameLIKESalt Lake' +
+	'^ORlocation.nameLIKENew York' + 
+	'^priorityIN1,3' + 
+	'^stateIN2,4' + 
+	'^active=true';
+
+testEncodedQuery(sql, loggingSource);
+
+function testEncodedQuery(sql, loggingSource) {
+	var message = '\n'; // neat trick to clean up your output
+	
+	var incidentRecords = new GlideRecord('incident');
+	incidentRecords.addEncodedQuery(sql); // now add in our encoded query
+	incidentRecords.orderBy('number');
+	incidentRecords.query();
+
+	while (incidentRecords.next()) {
+		// http://docs.oracle.com/javase/6/docs/api/?java/text/MessageFormat.html
+		// you have to have the array of values, won't work otherwise!
+		message += gs.getMessage('---> Number: {0}, {1}, {2}, {3}\n', 
+			[incidentRecords.number, 
+			incidentRecords.priority, 
+			incidentRecords.state, 
+			incidentRecords.location.name]);
+		
+	}
+	
+	gs.info('{0} {1}', message, loggingSource + 'testEncodedQuery');
+
+}]]></script>
+<sys_class_name>sys_script_fix</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-25 13:44:51</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>5ba2fefc0fcfd6002ae14e9ce1050e16</sys_id>
+<sys_mod_count>7</sys_mod_count>
+<sys_name>CC Lab 1.5 Encoded Query Refactored</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_fix_5ba2fefc0fcfd6002ae14e9ce1050e16</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-25 14:59:19</sys_updated_on>
+<unloadable>false</unloadable>
+</sys_script_fix>
+</unload>

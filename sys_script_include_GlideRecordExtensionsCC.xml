@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:04:04">
+<sys_script_include action="INSERT_OR_UPDATE">
+<access>public</access>
+<active>true</active>
+<api_name>global.GlideRecordExtensionsCC</api_name>
+<client_callable>false</client_callable>
+<description>.addBetweenQuery - search for all records between two dates inclusive
+.toObject - Convert an GlideRecord record to an object
+.toObjectList - Convert an entire GlideRecord recordset to an object array
+.toJSON - convert the GlideRecod to a JSON object</description>
+<name>GlideRecordExtensionsCC</name>
+<script><![CDATA[GlideRecord.prototype.addBetweenQuery = function(fieldToCheck, beginDate, endDate) {
+
+	var beginDateCheck = gs.dateGenerate(beginDate); // convert to the appropriate string
+	var endDateCheck = gs.dateGenerate(endDate); // ibid.
+
+	this.addQuery(fieldToCheck, '>=', beginDateCheck);
+	this.addQuery(fieldToCheck, '<=', endDateCheck);
+};
+
+GlideRecord.prototype.toObject = function(recordToPackage) {
+	var packageToSend = {};
+	for (var property in recordToPackage) {
+		try {
+			packageToSend[property] = recordToPackage[property].getDisplayValue();
+		}
+		catch(err){}  // eat any error and continue processing
+	}
+	
+	return packageToSend;
+};
+
+GlideRecord.prototype.toObjectList = function() {
+	var objectList = [];
+	
+	while(this.next()) {
+		objectList.push(this.toObject(this));
+	}
+	
+	this.restoreLocation(); // set it back to the beginning so that we can use if for other things
+	
+	return objectList;
+};
+
+GlideRecord.prototype.toJSON = function() {
+	return new global.JSON().encode(this.toObjectList());
+};
+
+]]></script>
+<sys_class_name>sys_script_include</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-05 15:01:29</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>cd4444e60f2296002ae14e9ce1050ebf</sys_id>
+<sys_mod_count>9</sys_mod_count>
+<sys_name>GlideRecordExtensionsCC</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_include_cd4444e60f2296002ae14e9ce1050ebf</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-05 15:46:14</sys_updated_on>
+</sys_script_include>
+</unload>

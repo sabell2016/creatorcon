@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:04:44">
+<sys_ui_action action="INSERT_OR_UPDATE">
+<action_name/>
+<active>true</active>
+<client>true</client>
+<comments>Runs the current fix script.</comments>
+<condition>gs.hasRole("admin")</condition>
+<form_action>true</form_action>
+<form_button>true</form_button>
+<form_context_menu>true</form_context_menu>
+<form_link>true</form_link>
+<hint>Run this Fix Script now – ignores the ‘Run once’ field value, honors ‘Unloadable’ and ‘Flush cache’ fields</hint>
+<list_action>true</list_action>
+<list_banner_button>false</list_banner_button>
+<list_button>false</list_button>
+<list_choice>false</list_choice>
+<list_context_menu>true</list_context_menu>
+<list_link>false</list_link>
+<list_save_with_form_button>false</list_save_with_form_button>
+<name>Run Fix Script - CC</name>
+<onclick>runFixScript()</onclick>
+<order>100</order>
+<script><![CDATA[function runFixScript() {
+	var sysId = typeof rowSysId == 'undefined' ? gel('sys_uniqueValue').value : rowSysId;
+	var gr = new GlideRecord("sys_script_fix");
+
+	gr.addQuery("sys_id", sysId);
+	gr.query();
+	if (gr.next()) {
+		if (gr.active == 'true') {
+			new GlideOverlay({
+				title: new GwtMessage().getMessage('Run Fix Script'),
+				form: 'run_fix_script_dialog',
+				preferences: {
+					'sysparm_script_name': gr.name,
+					'sysparm_sys_id': gr.sys_id
+				},
+				width: 600
+			}).render();
+		} else {
+			alert(new GwtMessage().getMessage('That fix script is inactive.  To run the fix script, first activate it.'));
+		}
+	} else {
+		alert((new GwtMessage().getMessage('Fix script not found')) + ": " + sysId);
+	}
+}]]></script>
+<show_insert>false</show_insert>
+<show_multiple_update>false</show_multiple_update>
+<show_query>false</show_query>
+<show_update>true</show_update>
+<sys_class_name>sys_ui_action</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2015-08-21 13:39:47</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_domain>global</sys_domain>
+<sys_domain_path>/</sys_domain_path>
+<sys_id>1b3725c50f0ac2002ae14e9ce1050ec4</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_name>Run Fix Script - CC</sys_name>
+<sys_overrides display_value=""/>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_ui_action_1b3725c50f0ac2002ae14e9ce1050ec4</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-07 17:00:10</sys_updated_on>
+<table>sys_script_fix</table>
+<ui11_compatible>true</ui11_compatible>
+<ui16_compatible>false</ui16_compatible>
+</sys_ui_action>
+</unload>

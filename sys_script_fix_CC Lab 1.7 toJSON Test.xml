@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:03:26">
+<sys_script_fix action="INSERT_OR_UPDATE">
+<active>true</active>
+<before>false</before>
+<description>Fix Script demonstrate a method for converting a full GlideRecord record to an object array list.</description>
+<flush_cache>false</flush_cache>
+<name>CC Lab 1.7 toJSON Test</name>
+<run_once>true</run_once>
+<script><![CDATA[gs.include('GlideRecordExtensionsCC'); // bring in our library
+
+var loggingSource = '\n\t***FS:CC Lab 1.7 toJSON-';
+
+var startDate = new GlideDateTime('2013-06-12');
+var endDate = new GlideDateTime('2014-11-28');
+
+testConversion(startDate, endDate, loggingSource);
+
+function testConversion(startDate, endDate, loggingSource) {
+
+	// we will use our new .addBetweenQuery function as well!
+	var incidents = new GlideRecord('incident');
+	incidents.addBetweenQuery('sys_created_on', startDate, endDate); 
+	incidents.addQuery('active', true);
+	incidents.setLimit(2);  // lets only get a couple for the exercise
+	incidents.query();
+
+	// Now convert our recordset to JSON!
+	gs.info('---> {0} {1}', 
+			incidents.toJSON(), 
+			loggingSource + 'testConversion');
+}]]></script>
+<sys_class_name>sys_script_fix</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-25 02:16:32</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>a425d4f00f0fd6002ae14e9ce1050ef6</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_name>CC Lab 1.7 toJSON Test</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_fix_a425d4f00f0fd6002ae14e9ce1050ef6</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-25 02:16:32</sys_updated_on>
+<unloadable>false</unloadable>
+</sys_script_fix>
+</unload>

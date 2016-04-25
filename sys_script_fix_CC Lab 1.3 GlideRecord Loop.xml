@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 19:59:20">
+<sys_script_fix action="INSERT_OR_UPDATE">
+<active>true</active>
+<before>false</before>
+<description>GlideRecord Inside of a GlideRecord Loop Scenario</description>
+<flush_cache>false</flush_cache>
+<name>CC Lab 1.3 GlideRecord Loop</name>
+<run_once>true</run_once>
+<script><![CDATA[// Example of a GlideRecord inside of a GlideRecord
+var loggingSource = '\t****FS:CC Lab 1.3 glideRecordLoop';
+
+// we won't limit the number of records because we want 
+// to execute a few to get a better timing
+var incidents = new GlideRecord('incident');
+incidents.orderBy('number');
+incidents.query();
+
+while (incidents.next()) {
+	var cmdb_ci = new GlideRecord('cmdb_ci');
+	cmdb_ci.addQuery('sys_id', incidents.cmdb_ci);
+	cmdb_ci.query();
+	
+	while (cmdb_ci.next()) {
+		gs.info('---> {0} {1}', 
+				cmdb_ci.name, 
+				loggingSource);
+	}
+}
+]]></script>
+<sys_class_name>sys_script_fix</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-25 15:55:19</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>5e80d3300f431a002ae14e9ce1050ea3</sys_id>
+<sys_mod_count>6</sys_mod_count>
+<sys_name>CC Lab 1.3 GlideRecord Loop</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_fix_5e80d3300f431a002ae14e9ce1050ea3</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-25 16:40:02</sys_updated_on>
+<unloadable>false</unloadable>
+</sys_script_fix>
+</unload>

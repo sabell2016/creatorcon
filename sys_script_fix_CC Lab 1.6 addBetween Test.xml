@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:02:11">
+<sys_script_fix action="INSERT_OR_UPDATE">
+<active>true</active>
+<before>false</before>
+<description>Test the .addBetween function for GlideRecord</description>
+<flush_cache>false</flush_cache>
+<name>CC Lab 1.6 addBetween Test</name>
+<run_once>true</run_once>
+<script><![CDATA[gs.include('GlideRecordExtensionsCC');
+
+var loggingSource = '\n\t****FS:CC Lab 1.6 addBetween-';
+
+var startDate = new GlideDateTime('2013-06-12');
+var endDate = new GlideDateTime('2014-11-28');
+
+testBetween(startDate, endDate, loggingSource);
+
+function testBetween(startDate, endDate, loggingSource) {
+
+	// retrieve all active records between the two dates inclusive!
+	var incidents = new GlideRecord('incident');
+	incidents.addBetweenQuery('sys_created_on', startDate, endDate); 
+	incidents.addQuery('active', true);
+	incidents.setLimit(2);  // lets only get a couple for the exercise
+	incidents.query();
+
+	gs.info('---> Records found: {0} {1}', 
+			incidents.getRowCount(), 
+			loggingSource + 'testBetween');
+
+	while (incidents.next()) {
+		gs.info('---> Records found: {0} - {1} {2}', 
+				incidents.number, 
+				incidents.sys_created_on,
+				loggingSource + 'testBetween');
+	}
+}]]></script>
+<sys_class_name>sys_script_fix</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-25 02:28:44</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>1be758f40f0fd6002ae14e9ce1050e5a</sys_id>
+<sys_mod_count>5</sys_mod_count>
+<sys_name>CC Lab 1.6 addBetween Test</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_fix_1be758f40f0fd6002ae14e9ce1050e5a</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-25 02:34:37</sys_updated_on>
+<unloadable>false</unloadable>
+</sys_script_fix>
+</unload>

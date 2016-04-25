@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:00:57">
+<sys_script_fix action="INSERT_OR_UPDATE">
+<active>true</active>
+<before>false</before>
+<description>Typical OR Condition GlideRecord</description>
+<flush_cache>false</flush_cache>
+<name>CC Lab 1.4 Typical OR GlideRecord</name>
+<run_once>true</run_once>
+<script><![CDATA[var loggingSource = '\t****FS:CC Lab 1.4 typicalORQuery-';
+
+var incidentRecords = new GlideRecord('incident');
+incidentRecords.addActiveQuery();  // make sure the record is active==true
+
+// AND in our first query and then tack in the other OR's
+var incQuery = incidentRecords.addQuery('location.name', 'CONTAINS', 'San Diego');
+incQuery.addOrCondition('location.name', 'CONTAINS', 'Salt Lake');
+incQuery.addOrCondition('location.name', 'CONTAINS', 'New York');
+
+// AND in our second query, and tack on the OR's
+var incQuery2 = incidentRecords.addQuery('priority', 1);
+incQuery2.addOrCondition('priority', 3);
+
+// AND in our third query, and tack on the OR's
+var incQuery3 = incidentRecords.addQuery('state', 2);
+incQuery3.addOrCondition('state', 4);
+
+incidentRecords.orderBy('number');
+incidentRecords.query();
+
+// now display the results
+while (incidentRecords.next()) {
+	// we can only have up to five in a row 
+	// then we have to goto an array of values
+    gs.info('---> Number: {0}, {1}, {2}, {3} {4}', 
+        incidentRecords.number, 
+        incidentRecords.priority, 
+        incidentRecords.state, 
+        incidentRecords.location.name,
+		loggingSource);
+}
+]]></script>
+<sys_class_name>sys_script_fix</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-25 15:05:32</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>5125cb340f031a002ae14e9ce1050e87</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_name>CC Lab 1.4 Typical OR GlideRecord</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_fix_5125cb340f031a002ae14e9ce1050e87</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-25 15:10:05</sys_updated_on>
+<unloadable>false</unloadable>
+</sys_script_fix>
+</unload>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-04-25 20:02:36">
+<sys_script_fix action="INSERT_OR_UPDATE">
+<active>true</active>
+<before>false</before>
+<description>Fix Script demonstrate a method for converting a single GlideRecord record to an object array.</description>
+<flush_cache>false</flush_cache>
+<name>CC Lab 1.7 toObject Test</name>
+<run_once>true</run_once>
+<script><![CDATA[gs.include('GlideRecordExtensionsCC');
+
+var loggingSource = '---FS:CC Lab 1.7 toObject - ';
+
+testConversion();
+
+function testConversion() {
+	var incidentRecords = new GlideRecord('incident');
+	incidentRecords.addQuery('state', '!=', 7); // closed
+	incidentRecords.setLimit(1); // We only want one record to play with
+	incidentRecords.orderByDesc('number'); // get the most recent incident
+	incidentRecords.query();
+
+	if (incidentRecords.next()) {
+		// convert the one recrod into an object array - 
+		// feed the current record to itself
+		var incident = incidentRecords.toObject(incidentRecords);
+		// you can reference the array elements either via array 
+		// nomenclature or by dot notation
+		gs.info('---> {0} - {1} [{2}]', 
+				incident['number'], 
+				incident.short_description, 
+				loggingSource + 'testConversion');
+		
+		// you can uncomment this line to get a look at the 
+		// entire converted GlideRecord object
+		//gs.info('---> {0} [{1}]', 
+		//		global.JSUtil.logObject(incidentRecords.toObject(incidentRecords)), 
+		//		loggingSource + 'test');
+	}
+}
+]]></script>
+<sys_class_name>sys_script_fix</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-04-25 00:59:31</sys_created_on>
+<sys_customer_update>true</sys_customer_update>
+<sys_id>90838cb40fcbd6002ae14e9ce1050eec</sys_id>
+<sys_mod_count>18</sys_mod_count>
+<sys_name>CC Lab 1.7 toObject Test</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy/>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_fix_90838cb40fcbd6002ae14e9ce1050eec</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-04-25 01:50:24</sys_updated_on>
+<unloadable>false</unloadable>
+</sys_script_fix>
+</unload>
